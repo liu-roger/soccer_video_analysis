@@ -22,10 +22,20 @@ class Tracker:
 
         for frame_num, detection in enumerate(detections):
             
-            class_names = detections.names
+            class_names = detection.names
             class_names_inverse = {v:k for k,v in class_names.items()} 
+            print(class_names)
 
             # Converting to supervision formatting
             detection_supervision = sv.Detections.from_ultralytics(detection)
 
-            print(detection_supervision) 
+            # convert goalie to player
+            for obj_index, class_id in enumerate(detection_supervision.class_id):
+                if class_names[class_id] == 'goalkeeper':
+                    detection_supervision.class_id[obj_index] = class_names_inverse['player']
+
+            # Track Objects
+            detection_with_tracks = self.tracker.update_with_detections(detection_supervision)
+
+            print(detection_with_tracks)
+
