@@ -19,12 +19,13 @@ class Tracker:
 
 
     def get_object_tracks(self, frames, read_from_stub = False, stub_path=None):
-        detections = self.detect_frames(frames)
-
+        
         if read_from_stub and (stub_path is not None) and (os.path.exists(stub_path)):
             with open(stub_path, 'rb') as f:
                 tracks = pickle.load(f)
             return tracks
+        
+        detections = self.detect_frames(frames)
 
         tracks = {
             'players':[],
@@ -60,7 +61,7 @@ class Tracker:
                     tracks['players'][frame_num][track_id] = {'bbox' :bounding_box}
                 
                 if class_id == class_names_inverse['referee']:
-                    tracks['referee'][frame_num][track_id] = {'bbox' :bounding_box}
+                    tracks['referees'][frame_num][track_id] = {'bbox' :bounding_box}
                 
             for frame_detection in detection_supervision:
                 bounding_box = frame_detection[0].tolist()
