@@ -19,6 +19,9 @@ def main():
                                        read_from_stub=True,
                                        stub_path='stubs/track_stubs.pkl')
     
+    # getting object positions
+    tracker.add_position_to_tracks(tracks)
+    
 
     # camera shift estimator
     camera_movement_estimator = CameraMovementEstimator(video_frames[0])
